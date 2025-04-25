@@ -1,0 +1,610 @@
+openapi: 3.1.0
+info:
+  description: API für das 5x5-Labyrinth-Spiel mit RESTful Endpunkten von Sebastian
+    Wolf Mart.Nr 6771635
+  title: Moderne Software Architekturen - 5x5-Labyrinth-API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /game:
+    post:
+      description: Startee ein neues Spiel mit dem Spieler auf Position A1 und dem
+        Ziel auf E5
+      operationId: createGame
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createGame_request'
+        required: false
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+          description: Labyrinth-Spiel erfolgreich erstellt
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Serverfehler
+      summary: Erstelle ein neues Labyrinth-Spiel
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /game/{gameId}:
+    get:
+      description: Liefere Informationen über den aktuellen Zustand des Spiels
+      operationId: getGameStatus
+      parameters:
+      - description: ID des Spiels
+        explode: false
+        in: path
+        name: gameId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+          description: Spielstatus erfolgreich zurückgegeben
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Spiel nicht gefunden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Serverfehler
+      summary: Gib den aktuellen Spielstatus zurück
+      x-accepts:
+      - application/json
+  /game/{gameId}/move:
+    post:
+      description: Bewegt den Spieler in eine der vier möglichen Richtungen unter
+        Berücksichtigung der Labyrinthwände
+      operationId: movePlayer
+      parameters:
+      - description: ID des Spiels
+        explode: false
+        in: path
+        name: gameId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoveResponse'
+          description: Bewegung erfolgreich durchgeführt oder verhindert durch Labyrinthwand
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Ungültige Bewegungsrichtung
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Spiel nicht gefunden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Serverfehler
+      summary: Führe einen Spielzug aus
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /game/{gameId}/board:
+    get:
+      description: "Liefere Informationen über das Labyrinth einschließlich aller\
+        \ Wände, der Position des Spielers und des Ziels"
+      operationId: getGameBoard
+      parameters:
+      - description: ID des Spiels
+        explode: false
+        in: path
+        name: gameId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Board'
+          description: Labyrinth erfolgreich zurückgegeben
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Spiel nicht gefunden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Serverfehler
+      summary: Gibe das aktuelle Labyrinth-Spielfeld zurück
+      x-accepts:
+      - application/json
+  /game/{gameId}/labyrinth:
+    post:
+      description: Generiere ein neues Labyrinth mit Wänden zwischen den Feldern
+      operationId: createLabyrinth
+      parameters:
+      - description: ID des Spiels
+        explode: false
+        in: path
+        name: gameId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createLabyrinth_request'
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Board'
+          description: Labyrinth erfolgreich erstellt
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Ungültige Labyrinth-Konfiguration
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Spiel nicht gefunden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Serverfehler
+      summary: Erstelle ein neues Labyrinth für das aktuelle Spiel
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /game/{gameId}/hint:
+    get:
+      description: Liefere einen Hinweis oder den nächsten Schritt auf dem Lösungsweg
+      operationId: getHint
+      parameters:
+      - description: ID des Spiels
+        explode: false
+        in: path
+        name: gameId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hint'
+          description: Hinweis erfolgreich zurückgegeben
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Spiel nicht gefunden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Serverfehler
+      summary: Gib einen Hinweis zur Lösung des Labyrinths
+      x-accepts:
+      - application/json
+  /game/{gameId}/solution:
+    get:
+      description: Liefere den vollständigen Lösungsweg von der aktuellen Position
+        zum Ziel
+      operationId: getSolution
+      parameters:
+      - description: ID des Spiels
+        explode: false
+        in: path
+        name: gameId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Solution'
+          description: Lösung erfolgreich zurückgegeben
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Spiel nicht gefunden oder keine Lösung möglich
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Serverfehler
+      summary: Gib die komplette Lösung des Labyrinths zurück
+      x-accepts:
+      - application/json
+  /game/{gameId}/reset:
+    post:
+      description: "Setzt den Spieler auf die Startposition A1 zurück, behält aber\
+        \ das Labyrinth bei"
+      operationId: resetGame
+      parameters:
+      - description: ID des Spiels
+        explode: false
+        in: path
+        name: gameId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+          description: Spiel erfolgreich zurückgesetzt
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Spiel nicht gefunden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Serverfehler
+      summary: Setze das Spiel zurück
+      x-accepts:
+      - application/json
+components:
+  schemas:
+    Game:
+      example:
+        moves: 6
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        message: message
+        playerPosition:
+          column: A
+          row: 1
+        status: running
+      properties:
+        id:
+          description: Eindeutige ID des Spiels
+          format: uuid
+          type: string
+        status:
+          description: Aktueller Status des Spiels
+          enum:
+          - running
+          - success
+          - failed
+          type: string
+        playerPosition:
+          $ref: '#/components/schemas/Position'
+        moves:
+          description: Anzahl der bisher durchgeführten Züge
+          type: integer
+        message:
+          description: Optionale Nachricht zum Spielstatus
+          type: string
+      required:
+      - id
+      - playerPosition
+      - status
+    Position:
+      example:
+        column: A
+        row: 1
+      properties:
+        column:
+          description: Spalte auf dem Spielfeld (A-E)
+          enum:
+          - A
+          - B
+          - C
+          - D
+          - E
+          type: string
+        row:
+          description: Zeile auf dem Spielfeld (1-5)
+          maximum: 5
+          minimum: 1
+          type: integer
+      required:
+      - column
+      - row
+    Board:
+      example:
+        goal:
+          column: A
+          row: 1
+        walls:
+        - position1:
+            column: A
+            row: 1
+          position2:
+            column: A
+            row: 1
+        - position1:
+            column: A
+            row: 1
+          position2:
+            column: A
+            row: 1
+        size:
+          columns: 0
+          rows: 6
+        visited:
+        - column: A
+          row: 1
+        - column: A
+          row: 1
+        playerPosition:
+          column: A
+          row: 1
+      properties:
+        size:
+          $ref: '#/components/schemas/Board_size'
+        playerPosition:
+          $ref: '#/components/schemas/Position'
+        goal:
+          $ref: '#/components/schemas/Position'
+        walls:
+          description: Liste der Wände im Labyrinth
+          items:
+            $ref: '#/components/schemas/Wall'
+          type: array
+        visited:
+          description: Liste der vom Spieler bereits besuchten Positionen
+          items:
+            $ref: '#/components/schemas/Position'
+          type: array
+      required:
+      - goal
+      - playerPosition
+      - size
+      - walls
+    Wall:
+      example:
+        position1:
+          column: A
+          row: 1
+        position2:
+          column: A
+          row: 1
+      properties:
+        position1:
+          $ref: '#/components/schemas/Position'
+        position2:
+          $ref: '#/components/schemas/Position'
+      required:
+      - position1
+      - position2
+    MoveRequest:
+      properties:
+        direction:
+          description: "Richtung, in die sich der Spieler bewegen soll"
+          enum:
+          - links
+          - rechts
+          - oben
+          - unten
+          type: string
+      required:
+      - direction
+    MoveResponse:
+      example:
+        newPosition:
+          column: A
+          row: 1
+        success: true
+        gameStatus: running
+        wallHit: true
+        message: message
+      properties:
+        success:
+          description: "Gibt an, ob die Bewegung erfolgreich war"
+          type: boolean
+        newPosition:
+          $ref: '#/components/schemas/Position'
+        gameStatus:
+          description: Aktueller Status des Spiels nach der Bewegung
+          enum:
+          - running
+          - success
+          - failed
+          type: string
+        wallHit:
+          description: "Gibt an, ob der Spieler versucht hat, durch eine Wand zu gehen"
+          type: boolean
+        message:
+          description: Optionale Nachricht oder Rückmeldung zur Bewegung
+          type: string
+      required:
+      - gameStatus
+      - newPosition
+      - success
+    Hint:
+      example:
+        suggestedDirection: links
+        message: message
+      properties:
+        message:
+          description: Texthinweis für den nächsten Schritt
+          type: string
+        suggestedDirection:
+          description: Empfohlene Bewegungsrichtung
+          enum:
+          - links
+          - rechts
+          - oben
+          - unten
+          type: string
+      required:
+      - message
+    Solution:
+      example:
+        path:
+        - column: A
+          row: 1
+        - column: A
+          row: 1
+        directions:
+        - links
+        - links
+        stepsToGoal: 0
+      properties:
+        path:
+          description: Liste der Positionen auf dem Lösungsweg
+          items:
+            $ref: '#/components/schemas/Position'
+          type: array
+        directions:
+          description: Liste der Bewegungsrichtungen für den Lösungsweg
+          items:
+            enum:
+            - links
+            - rechts
+            - oben
+            - unten
+            type: string
+          type: array
+        stepsToGoal:
+          description: Anzahl der Schritte bis zum Ziel
+          type: integer
+      required:
+      - directions
+      - path
+    Error:
+      example:
+        code: 1
+        message: message
+      properties:
+        code:
+          description: HTTP-Statuscode des Fehlers
+          type: integer
+        message:
+          description: Fehlerbeschreibung
+          type: string
+      required:
+      - code
+      - message
+    createGame_request:
+      properties:
+        labyrinthType:
+          default: random
+          description: Art des zu erstellenden Labyrinths
+          enum:
+          - random
+          - predefined
+          type: string
+        difficulty:
+          default: medium
+          description: Schwierigkeitsgrad (bestimmt Anzahl der Wände)
+          enum:
+          - easy
+          - medium
+          - hard
+          type: string
+    createLabyrinth_request:
+      properties:
+        type:
+          default: random
+          description: Art des zu erstellenden Labyrinths
+          enum:
+          - random
+          - predefined
+          type: string
+        difficulty:
+          default: medium
+          description: Schwierigkeitsgrad (bestimmt Anzahl der Wände)
+          enum:
+          - easy
+          - medium
+          - hard
+          type: string
+        walls:
+          description: Liste der benutzerdefinierten Wände (nur bei type=predefined)
+          items:
+            $ref: '#/components/schemas/Wall'
+          type: array
+    Board_size:
+      example:
+        columns: 0
+        rows: 6
+      properties:
+        columns:
+          description: Anzahl der Spalten auf dem Labyrinth
+          enum:
+          - 5
+          type: integer
+        rows:
+          description: Anzahl der Zeilen auf dem Labyrinth
+          enum:
+          - 5
+          type: integer
+      required:
+      - columns
+      - rows
+
