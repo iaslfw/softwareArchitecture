@@ -4,7 +4,7 @@ Moderne Software Architekturen - 5x5-Labyrinth-API
 
 - API version: 1.0.0
 
-- Build date: 2025-04-25T13:54:16.140286+02:00[Europe/Berlin]
+- Build date: 2025-04-25T14:09:25.383233+02:00[Europe/Berlin]
 
 - Generator version: 7.10.0
 

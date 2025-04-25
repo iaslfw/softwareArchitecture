@@ -21,7 +21,6 @@ org/openapitools/client/api/DefaultApi$10.class
 org/openapitools/client/model/CreateLabyrinthRequestDto.class
 org/openapitools/client/StringUtil.class
 org/openapitools/client/auth/HttpBasicAuth.class
-com/example/demo/GameStartupConfig.class
 org/openapitools/client/model/ErrorDto.class
 org/openapitools/client/RFC3339DateFormat.class
 org/openapitools/client/ServerConfiguration.class
@@ -47,6 +46,7 @@ org/openapitools/client/api/DefaultApi$17.class
 org/openapitools/client/model/WallDto.class
 org/openapitools/client/api/DefaultApi.class
 org/openapitools/client/api/DefaultApi$5.class
+com/example/demo/StartupBean.class
 org/openapitools/client/model/GameDto.class
 org/openapitools/client/api/DefaultApi$20.class
 org/openapitools/client/model/BoardSizeDto$ColumnsEnum.class

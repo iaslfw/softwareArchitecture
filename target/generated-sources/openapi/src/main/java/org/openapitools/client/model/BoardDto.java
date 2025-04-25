@@ -40,7 +40,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BoardDto.JSON_PROPERTY_VISITED
 })
 @JsonTypeName("Board")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-25T13:54:16.140286+02:00[Europe/Berlin]", comments = "Generator version: 7.10.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-25T14:09:25.383233+02:00[Europe/Berlin]", comments = "Generator version: 7.10.0")
 public class BoardDto {
   public static final String JSON_PROPERTY_SIZE = "size";
   @jakarta.annotation.Nonnull
