@@ -14,6 +14,7 @@ org/openapitools/client/api/DefaultApi$7.class
 org/openapitools/client/model/GameDto$StatusEnum.class
 org/openapitools/client/api/DefaultApi$22.class
 org/openapitools/client/ApiClient$CollectionFormat.class
+com/example/demo/service/AutoPlayerService.class
 org/openapitools/client/auth/Authentication.class
 org/openapitools/client/model/MoveRequestDto$DirectionEnum.class
 org/openapitools/client/model/CreateGameRequestDto.class
@@ -22,12 +23,14 @@ org/openapitools/client/model/CreateLabyrinthRequestDto.class
 org/openapitools/client/StringUtil.class
 org/openapitools/client/auth/HttpBasicAuth.class
 org/openapitools/client/model/ErrorDto.class
+com/example/demo/service/GameService$Game.class
 org/openapitools/client/RFC3339DateFormat.class
 org/openapitools/client/ServerConfiguration.class
 org/openapitools/client/model/HintDto.class
 org/openapitools/client/ServerVariable.class
 org/openapitools/client/api/DefaultApi$3.class
 org/openapitools/client/api/DefaultApi$13.class
+com/example/demo/service/GameService$1.class
 org/openapitools/client/auth/ApiKeyAuth.class
 org/openapitools/client/api/DefaultApi$24.class
 org/openapitools/client/api/DefaultApi$9.class
@@ -43,12 +46,14 @@ org/openapitools/client/api/DefaultApi$2.class
 org/openapitools/client/model/SolutionDto.class
 org/openapitools/client/api/DefaultApi$14.class
 org/openapitools/client/api/DefaultApi$17.class
+com/example/demo/service/GameService.class
 org/openapitools/client/model/WallDto.class
 org/openapitools/client/api/DefaultApi.class
 org/openapitools/client/api/DefaultApi$5.class
 com/example/demo/StartupBean.class
 org/openapitools/client/model/GameDto.class
 org/openapitools/client/api/DefaultApi$20.class
+com/example/demo/controller/GameController.class
 org/openapitools/client/model/BoardSizeDto$ColumnsEnum.class
 org/openapitools/client/model/MoveResponseDto.class
 org/openapitools/client/api/DefaultApi$15.class
@@ -58,5 +63,6 @@ org/openapitools/client/ApiClient.class
 org/openapitools/client/api/DefaultApi$18.class
 org/openapitools/client/model/BoardSizeDto$RowsEnum.class
 org/openapitools/client/api/DefaultApi$23.class
+com/example/demo/service/GameService$PathNode.class
 org/openapitools/client/model/SolutionDto$DirectionsEnum.class
 org/openapitools/client/api/DefaultApi$8.class

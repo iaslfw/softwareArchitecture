@@ -1,5 +1,8 @@
 /Users/sebastianwolf/projects/dhbw/software-architekturen/src/main/java/com/example/demo/PortfolioSpringSetupApplication.java
 /Users/sebastianwolf/projects/dhbw/software-architekturen/src/main/java/com/example/demo/StartupBean.java
+/Users/sebastianwolf/projects/dhbw/software-architekturen/src/main/java/com/example/demo/controller/GameController.java
+/Users/sebastianwolf/projects/dhbw/software-architekturen/src/main/java/com/example/demo/service/AutoPlayerService.java
+/Users/sebastianwolf/projects/dhbw/software-architekturen/src/main/java/com/example/demo/service/GameService.java
 /Users/sebastianwolf/projects/dhbw/software-architekturen/target/generated-sources/openapi/src/main/java/org/openapitools/client/ApiClient.java
 /Users/sebastianwolf/projects/dhbw/software-architekturen/target/generated-sources/openapi/src/main/java/org/openapitools/client/JavaTimeFormatter.java
 /Users/sebastianwolf/projects/dhbw/software-architekturen/target/generated-sources/openapi/src/main/java/org/openapitools/client/RFC3339DateFormat.java

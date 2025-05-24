@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   MoveRequestDto.JSON_PROPERTY_DIRECTION
 })
 @JsonTypeName("MoveRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-25T14:09:25.383233+02:00[Europe/Berlin]", comments = "Generator version: 7.10.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-05-24T10:47:41.163385+02:00[Europe/Berlin]", comments = "Generator version: 7.10.0")
 public class MoveRequestDto {
   /**
    * Richtung, in die sich der Spieler bewegen soll

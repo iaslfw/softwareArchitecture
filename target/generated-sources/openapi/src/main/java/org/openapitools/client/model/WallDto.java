@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   WallDto.JSON_PROPERTY_POSITION2
 })
 @JsonTypeName("Wall")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-04-25T14:09:25.383233+02:00[Europe/Berlin]", comments = "Generator version: 7.10.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-05-24T10:47:41.163385+02:00[Europe/Berlin]", comments = "Generator version: 7.10.0")
 public class WallDto {
   public static final String JSON_PROPERTY_POSITION1 = "position1";
   @jakarta.annotation.Nonnull
