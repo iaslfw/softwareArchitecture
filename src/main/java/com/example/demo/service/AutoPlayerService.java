@@ -62,7 +62,6 @@ public class AutoPlayerService {
                     if (moveResponse.getGameStatus() == MoveResponseDto.GameStatusEnum.SUCCESS) {
                         logger.info("Gewonnen! {}", moveResponse.getMessage());
 
-                        // Finale Spielstatistiken
                         GameDto finalGame = api.getGameStatus(gameId);
                         logger.info("Statistiken:");
                         logger.info("   - Anzahl Züge: {}", finalGame.getMoves());
