@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameService {
 
     private Map<UUID, Game> games = new ConcurrentHashMap<>();
+    private Random random = new Random();
 
     public GameDto createGame(CreateGameRequestDto request) {
         UUID gameId = UUID.randomUUID();
@@ -21,10 +22,21 @@ public class GameService {
         game.setMoves(0);
         game.setMessage("Spiel erstellt! Start: A1, Ziel: E5.");
 
-        createDefaultLabyrinth(game);
+        CreateGameRequestDto.DifficultyEnum difficulty = request != null && request.getDifficulty() != null
+                ? request.getDifficulty()
+                : CreateGameRequestDto.DifficultyEnum.MEDIUM;
+
+        CreateGameRequestDto.LabyrinthTypeEnum labyrinthType = request != null && request.getLabyrinthType() != null
+                ? request.getLabyrinthType()
+                : CreateGameRequestDto.LabyrinthTypeEnum.RANDOM;
+
+        if (labyrinthType == CreateGameRequestDto.LabyrinthTypeEnum.RANDOM) {
+            createRandomLabyrinth(game, difficulty);
+        } else {
+            createDefaultLabyrinth(game);
+        }
 
         games.put(gameId, game);
-
         return convertToGameDto(game);
     }
 
@@ -57,7 +69,6 @@ public class GameService {
             response.setNewPosition(newPos);
             response.setWallHit(false);
 
-            // Prüfe ob Ziel erreicht
             if (isPositionEqual(newPos, game.getGoal())) {
                 game.setStatus(GameDto.StatusEnum.SUCCESS);
                 response.setMessage("Nice! Ziel erreicht in " + game.getMoves() + " Zügen!");
@@ -97,7 +108,12 @@ public class GameService {
         if (request != null && request.getType() == CreateLabyrinthRequestDto.TypeEnum.PREDEFINED && request.getWalls() != null) {
             game.setWalls(request.getWalls());
         } else {
-            createDefaultLabyrinth(game);
+            CreateLabyrinthRequestDto.DifficultyEnum difficulty = request != null && request.getDifficulty() != null
+                    ? CreateLabyrinthRequestDto.DifficultyEnum.valueOf(request.getDifficulty().getValue().toUpperCase())
+                    : CreateLabyrinthRequestDto.DifficultyEnum.MEDIUM;
+
+            CreateGameRequestDto.DifficultyEnum gameDifficulty = CreateGameRequestDto.DifficultyEnum.valueOf(difficulty.getValue().toUpperCase());
+            createRandomLabyrinth(game, gameDifficulty);
         }
 
         return getGameBoard(gameId);
@@ -156,7 +172,100 @@ public class GameService {
         return convertToGameDto(game);
     }
 
-    // Hilfsmethoden
+    private void createRandomLabyrinth(Game game, CreateGameRequestDto.DifficultyEnum difficulty) {
+        int maxAttempts = 50;
+        int attempts = 0;
+
+        while (attempts < maxAttempts) {
+            List<WallDto> walls = generateRandomWalls(difficulty);
+
+            if (hasValidPath(game.getPlayerPosition(), game.getGoal(), walls)) {
+                game.setWalls(walls);
+                game.setVisited(new ArrayList<>());
+                game.getVisited().add(game.getPlayerPosition());
+                return;
+            }
+
+            attempts++;
+        }
+
+        createDefaultLabyrinth(game);
+    }
+
+    private List<WallDto> generateRandomWalls(CreateGameRequestDto.DifficultyEnum difficulty) {
+        List<WallDto> walls = new ArrayList<>();
+        Set<String> usedWalls = new HashSet<>();
+
+        int minWalls, maxWalls;
+        switch (difficulty) {
+            case EASY:
+                minWalls = 3;
+                maxWalls = 5;
+                break;
+            case HARD:
+                minWalls = 8;
+                maxWalls = 12;
+                break;
+            case MEDIUM:
+            default:
+                minWalls = 5;
+                maxWalls = 8;
+                break;
+        }
+
+        int numWalls = random.nextInt(maxWalls - minWalls + 1) + minWalls;
+
+        List<WallDto> possibleWalls = getAllPossibleWalls();
+
+        Collections.shuffle(possibleWalls, random);
+
+        for (int i = 0; i < Math.min(numWalls, possibleWalls.size()); i++) {
+            WallDto wall = possibleWalls.get(i);
+            String wallKey = getWallKey(wall);
+
+            if (!usedWalls.contains(wallKey)) {
+                walls.add(wall);
+                usedWalls.add(wallKey);
+            }
+        }
+
+        return walls;
+    }
+
+    private List<WallDto> getAllPossibleWalls() {
+        List<WallDto> possibleWalls = new ArrayList<>();
+        PositionDto.ColumnEnum[] columns = PositionDto.ColumnEnum.values();
+
+        for (PositionDto.ColumnEnum col : columns) {
+            for (int row = 1; row <= 4; row++) {
+                possibleWalls.add(createWall(col, row, col, row + 1));
+            }
+        }
+
+        for (int row = 1; row <= 5; row++) {
+            for (int colIndex = 0; colIndex < columns.length - 1; colIndex++) {
+                possibleWalls.add(createWall(columns[colIndex], row, columns[colIndex + 1], row));
+            }
+        }
+
+        return possibleWalls;
+    }
+
+    private String getWallKey(WallDto wall) {
+        PositionDto pos1 = wall.getPosition1();
+        PositionDto pos2 = wall.getPosition2();
+
+        String key1 = pos1.getColumn().getValue() + pos1.getRow();
+        String key2 = pos2.getColumn().getValue() + pos2.getRow();
+
+        return key1.compareTo(key2) <= 0 ? key1 + "-" + key2 : key2 + "-" + key1;
+    }
+
+    private boolean hasValidPath(PositionDto start, PositionDto goal, List<WallDto> walls) {
+        List<MoveRequestDto.DirectionEnum> path = findPath(start, goal, walls);
+        return !path.isEmpty();
+    }
+
     private void createDefaultLabyrinth(Game game) {
         List<WallDto> walls = new ArrayList<>();
 
@@ -321,7 +430,6 @@ public class GameService {
         private List<WallDto> walls;
         private List<PositionDto> visited;
 
-        // Getters und Setters
         public UUID getId() { return id; }
         public void setId(UUID id) { this.id = id; }
         public GameDto.StatusEnum getStatus() { return status; }

@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   HintDto.JSON_PROPERTY_SUGGESTED_DIRECTION
 })
 @JsonTypeName("Hint")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-05-24T10:47:41.163385+02:00[Europe/Berlin]", comments = "Generator version: 7.10.0")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2025-05-24T10:54:22.793437+02:00[Europe/Berlin]", comments = "Generator version: 7.10.0")
 public class HintDto {
   public static final String JSON_PROPERTY_MESSAGE = "message";
   @jakarta.annotation.Nonnull
